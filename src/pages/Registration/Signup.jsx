@@ -1,12 +1,35 @@
 import GoogleAuth from "../../components/GoogleAuth";
-import GoogleButton from "react-google-button";
-import React from "react";
-import google from "../../assets/google.png";
+import React, { useState } from "react";
 import logoText from "../../assets/logoText.png";
 import phoneScreen from "../../assets/phoneScreen.png";
-import { Link } from "react-router-dom";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../../firebase/firebaseConfig";
 
 function Signup() {
+  const navigate=useNavigate()
+  
+  const [userSignup, setUserSignup] = useState({
+    name: '',
+    email: '',
+    password: ''
+  })
+
+  const userSignupfunction = async () => {
+    try {
+      const users = await createUserWithEmailAndPassword(auth, userSignup.email, userSignup.password)
+      console.log(users);
+      setUserSignup({
+        name: '',
+        email: '',
+        password: ''
+      })
+      navigate("/login")
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <div>
 
@@ -27,10 +50,25 @@ function Signup() {
                 {/* All input */}
 
                 <div className=" w-[75%]  flex items-center flex-col ">
-                  <input className=" w-full ps-2 outline-none rounded-sm border-gray-300 py-1 bg-gray-100 border my-2" type="email" placeholder="email" />
-                  <input className=" w-full ps-2 outline-none rounded-sm border-gray-300 py-1 bg-gray-100 border my-2" type="text" placeholder="username" />
-                  <input className=" w-full ps-2 outline-none rounded-sm border-gray-300 py-1 bg-gray-100 border my-2" type="password" placeholder="password" />
-                  <button className=" w-full bg-blue-300 font-semibold text-white rounded-md p-2 mt-1">Sign up</button>
+                  <input className=" w-full ps-2 outline-none rounded-sm border-gray-300 py-1 bg-gray-100 border my-2" type="email" placeholder="email"
+                    value={userSignup.email}
+                    onChange={(e) => {
+                      setUserSignup({ ...userSignup, email: e.target.value })
+                    }}
+                  />
+                  <input className=" w-full ps-2 outline-none rounded-sm border-gray-300 py-1 bg-gray-100 border my-2" type="text" placeholder="username"
+                    value={userSignup.name}
+                    onChange={(e) => {
+                      setUserSignup({ ...userSignup, name: e.target.value })
+                    }}
+                  />
+                  <input className=" w-full ps-2 outline-none rounded-sm border-gray-300 py-1 bg-gray-100 border my-2" type="password" placeholder="password"
+                    value={userSignup.password}
+                    onChange={(e) => {
+                      setUserSignup({ ...userSignup, password: e.target.value })
+                    }}
+                  />
+                  <button className=" w-full bg-blue-300 font-semibold text-white rounded-md p-2 mt-1" onClick={userSignupfunction}>Sign up</button>
                 </div>
 
                 {/* seperator */}
