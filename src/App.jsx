@@ -5,6 +5,7 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import ProtectedRoutesForHome from "./ProtectedRoutes/ProtectedRoutesForHome";
 import ProtectedRoutesForProfile from "./ProtectedRoutes/ProtectedRoutesForProfile";
 import Signup from "./pages/Registration/Signup";
+import Toastify from "react-hot-toast";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import { useState } from "react";
@@ -31,7 +32,7 @@ function App() {
       <Route path="/signup" element={<Signup/>}/>
       <Route path="/login" element={<Login/>}/>
     </Routes>
-    
+    {/* <Toastify/> */}
     </BrowserRouter>
     
    </MyState>

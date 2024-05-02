@@ -2,13 +2,16 @@ import GoogleAuth from "../../components/GoogleAuth";
 import React, { useState } from "react";
 import logoText from "../../assets/logoText.png";
 import phoneScreen from "../../assets/phoneScreen.png";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import toast from "react-hot-toast";
+import { data } from "autoprefixer";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { addDoc, doc, setDoc, updateDoc } from "firebase/firestore";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../../firebase/firebaseConfig";
+import { auth, fireDB } from "../../firebase/firebaseConfig";
 
 function Signup() {
-  const navigate=useNavigate()
-  
+  const navigate = useNavigate()
+
   const [userSignup, setUserSignup] = useState({
     name: '',
     email: '',
@@ -16,9 +19,35 @@ function Signup() {
   })
 
   const userSignupfunction = async () => {
+    if (userSignup.name === '' || userSignup.email === '' || userSignup.password === '') {
+      return toast.error("All Fields Are Required")
+
+    }
+
+
     try {
       const users = await createUserWithEmailAndPassword(auth, userSignup.email, userSignup.password)
       console.log(users);
+      updateProfile(users.user, {
+        displayName: userSignup.name,
+
+      })
+      await setDoc(doc(fireDB, "users", users.user.uid), {
+        display: userSignup.name,
+        uId: users.user.uid,
+        followers: [],
+        following: [],
+        posts: [],
+        date:new Date().toLocaleString("en-US",{
+          month:'short',
+          day:'2-digit',
+          year:"numeric"
+        }),
+        profilePicUrl: users.user.photoURL,
+        email:users.user.email,
+        
+
+      })
       setUserSignup({
         name: '',
         email: '',

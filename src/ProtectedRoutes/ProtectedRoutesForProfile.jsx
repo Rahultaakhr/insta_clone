@@ -3,19 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { MyContext } from "../context/MyContext";
 
 function ProtectedRoutesForProfile({children}) {
-    const {currentUser}=useContext(MyContext)
+    const {currentUserForProtectedRoutes}=useContext(MyContext)
     const navigate=useNavigate()
-    console.log(currentUser);
+    console.log(currentUserForProtectedRoutes);
     useEffect(() => {
-     if (!currentUser) {
+     if (!currentUserForProtectedRoutes) {
         navigate("/login")
      }
      else{
         navigate("/profile")
      }
-    }, [currentUser,navigate])
+    }, [currentUserForProtectedRoutes,navigate])
 
-    return currentUser?children:null
+    return currentUserForProtectedRoutes?children:null
     
 }
 
