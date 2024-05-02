@@ -56,12 +56,13 @@ function ProfilePage() {
                         <div className="  rounded-full overflow-hidden ">
                             <input type="file" name="" id="file" onChange={(e) => { setFile({ ...file, photoFile: e.target.files[0] }) }} hidden />
                             <label htmlFor="file">
-                                <img className=" w-[90px]  md:w-[130px] h-[90px] md:h-[130px]" src={currentUser.profilePicUrl ? currentUser.profilePicUrl : 'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'} alt="" />
+                                <img  className=" w-[90px]  md:w-[130px] h-[90px] md:h-[130px]" src={currentUser.profilePicUrl ? currentUser.profilePicUrl : 'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'} alt="" />
                             </label>
                         </div>
+
                         <div className="  w-auto max-w-[400px] overflow-hidden  h-auto max-h-[300px]  md:p-7 p-3">
                             <div className=" flex justify-between"> <h1 className=" font-bold">{
-                                currentUser.display
+                                currentUser.displayName
                             }</h1>
 
                                 <Button className=" bg-black py-1 px-4" onClick={uploadImg}>Edit</Button></div>
@@ -72,7 +73,7 @@ function ProfilePage() {
                                 <p><span className=" font-bold">{currentUser.following?.length}</span> Following</p>
 
                             </div>
-                            <div className=" font-medium ">Rahul</div>
+                            <div className=" font-medium ">{currentUser.name}</div>
                             <div className="overflow-hidden">Bio </div>
                         </div>
                     </div>

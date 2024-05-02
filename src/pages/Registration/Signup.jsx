@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import logoText from "../../assets/logoText.png";
 import phoneScreen from "../../assets/phoneScreen.png";
 import toast from "react-hot-toast";
+import { collapse } from "@material-tailwind/react";
 import { data } from "autoprefixer";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { addDoc, doc, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { Link, useNavigate } from "react-router-dom";
 import { auth, fireDB } from "../../firebase/firebaseConfig";
 
@@ -14,42 +15,46 @@ function Signup() {
 
   const [userSignup, setUserSignup] = useState({
     name: '',
+    userName: '',
     email: '',
     password: ''
   })
 
   const userSignupfunction = async () => {
-    if (userSignup.name === '' || userSignup.email === '' || userSignup.password === '') {
+    if (userSignup.name === '' || userSignup.email === '' || userSignup.password === '' || userSignup.userName === '') {
       return toast.error("All Fields Are Required")
 
     }
+
 
 
     try {
       const users = await createUserWithEmailAndPassword(auth, userSignup.email, userSignup.password)
       console.log(users);
       updateProfile(users.user, {
-        displayName: userSignup.name,
+        displayName: userSignup.userName,
 
       })
       await setDoc(doc(fireDB, "users", users.user.uid), {
-        display: userSignup.name,
+        name: userSignup.name,
+        displayName: userSignup.userName,
         uId: users.user.uid,
         followers: [],
         following: [],
         posts: [],
-        date:new Date().toLocaleString("en-US",{
-          month:'short',
-          day:'2-digit',
-          year:"numeric"
+        date: new Date().toLocaleString("en-US", {
+          month: 'short',
+          day: '2-digit',
+          year: "numeric"
         }),
         profilePicUrl: users.user.photoURL,
-        email:users.user.email,
-        
+        email: users.user.email,
+
 
       })
       setUserSignup({
         name: '',
+        userName: '',
         email: '',
         password: ''
       })
@@ -73,25 +78,31 @@ function Signup() {
             {/* Account sec */}
             <div className=" ">
               {/* upper  */}
-              <div className=" md:border  w-[380px] h-[450px]  flex items-center justify-start flex-col">
-                <img src={logoText} className=" w-[65%]   " alt="" />
+              <div className=" md:border  w-[380px] h-auto pb-2  flex items-center justify-start flex-col">
+                <img src={logoText} className="  w-[60%]   " alt="" />
 
                 {/* All input */}
 
                 <div className=" w-[75%]  flex items-center flex-col ">
-                  <input className=" w-full ps-2 outline-none rounded-sm border-gray-300 py-1 bg-gray-100 border my-2" type="email" placeholder="email"
+                  <input className=" w-full ps-2 outline-none rounded-sm border-gray-300 py-1 bg-gray-100 border my-2" type="email" placeholder="Email"
                     value={userSignup.email}
                     onChange={(e) => {
                       setUserSignup({ ...userSignup, email: e.target.value })
                     }}
                   />
-                  <input className=" w-full ps-2 outline-none rounded-sm border-gray-300 py-1 bg-gray-100 border my-2" type="text" placeholder="username"
+                  <input className=" w-full ps-2 outline-none rounded-sm border-gray-300 py-1 bg-gray-100 border my-2" type="text" placeholder="Username"
+                    value={userSignup.userName}
+                    onChange={(e) => {
+                      setUserSignup({ ...userSignup, userName: e.target.value })
+                    }}
+                  />
+                  <input className=" w-full ps-2 outline-none rounded-sm border-gray-300 py-1 bg-gray-100 border my-2" type="text" placeholder="Name"
                     value={userSignup.name}
                     onChange={(e) => {
                       setUserSignup({ ...userSignup, name: e.target.value })
                     }}
                   />
-                  <input className=" w-full ps-2 outline-none rounded-sm border-gray-300 py-1 bg-gray-100 border my-2" type="password" placeholder="password"
+                  <input className=" w-full ps-2 outline-none rounded-sm border-gray-300 py-1 bg-gray-100 border my-2" type="password" placeholder="Password"
                     value={userSignup.password}
                     onChange={(e) => {
                       setUserSignup({ ...userSignup, password: e.target.value })

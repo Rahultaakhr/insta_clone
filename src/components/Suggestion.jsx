@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import SearchSection from "./SearchSection";
 import { Button } from "@material-tailwind/react";
 import { signOut, updateProfile } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
@@ -21,15 +22,16 @@ function Suggestion({ className }) {
           <div className=" flex items-center gap-3">
            
       
-              <img className=" w-[60px] h-[60px] rounded-full" src="https://i.pinimg.com/736x/30/a9/bd/30a9bdea0a3019bf01f5b5576b983874.jpg" alt="" />
+              <img className=" w-[60px] h-[60px] rounded-full" src={currentUser.profilePicUrl ? currentUser.profilePicUrl:'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'} alt="" />
         
             <div>
               <h2 className=" font-semibold">{currentUserForProtectedRoutes.displayName}</h2>
-              <p>Rahul</p>
+              <p>{currentUser.name}</p>
             </div>
           </div>
 
           <Button onClick={userLogoutFuntion} className="  p-3  bg-black">Logout</Button>
+         
         </div>
 
 

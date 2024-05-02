@@ -2,6 +2,7 @@ import GoogleAuth from "../../components/GoogleAuth";
 import React, { useState } from "react";
 import logoText from "../../assets/logoText.png";
 import phoneScreen from "../../assets/phoneScreen.png";
+import toast from "react-hot-toast";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase/firebaseConfig";
@@ -15,6 +16,10 @@ function Login() {
     }
   )
   const userLoginFunction=async()=>{
+    if ( userLogin.email === '' || userLogin.password === '') {
+      return toast.error("All Fields Are Required")
+
+    }
     try {
       const users=await signInWithEmailAndPassword(auth,userLogin.email,userLogin.password)
      
