@@ -1,3 +1,4 @@
+import PostEditor from "./PostEditor";
 import React, { useContext } from "react";
 import SearchSection from "./SearchSection";
 import logoText from "../assets/logoText.png";
@@ -24,7 +25,8 @@ function SideBar({className}) {
                         <li className=" py-3 text-[20px] font-medium items-center flex"> <span><img className=" mr-3 w-[28px]" src={reelsIcon} alt="" /> </span><span className=" hidden xl:inline-block">Reels</span></li>
                         <li className=" py-3 text-[20px] font-medium"><i className="  text-[25px] mr-2 fa-brands fa-facebook-messenger"></i> <span className=" hidden xl:inline-block">Messages</span></li>
                         <li className=" py-3 text-[20px] font-medium"><i className="  text-[25px] mr-2 fa-regular fa-heart"></i> <span className=" hidden xl:inline-block">Notifications</span></li>
-                        <li className=" py-3 text-[20px] font-medium"><i className="  text-[25px] mr-2 fa-regular fa-square-plus"></i> <span className=" hidden xl:inline-block">Add Post</span></li>
+                        <PostEditor/>
+                        {/* <li className=" py-3 text-[20px] font-medium" onClick={()=>(<PostEditor/>)}><i className="  text-[25px] mr-2 fa-regular fa-square-plus"></i> <span className=" hidden xl:inline-block">Add Post</span></li> */}
                         <li className=" py-3 text-[20px] font-medium" onClick={()=>{navigate("/profile")}}><i className="  text-[25px] mr-2 fa-regular fa-circle-user"></i> <span className=" hidden xl:inline-block">Profile</span></li>
                     </ul>
 
