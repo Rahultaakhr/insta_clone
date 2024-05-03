@@ -17,55 +17,50 @@ function ProfilePage() {
 
     const getPost = async () => {
         try {
-
-
-            const querySnapshot = await getDocs(collection(fireDB, "users"), where("uId", "==", currentUserForProtectedRoutes.uid));
+            const querySnapshot = await getDocs(query(collection(fireDB, "users"), where("uId", "==", currentUserForProtectedRoutes.uid)));
+            const posts = [];
             querySnapshot.forEach((doc) => {
-
-                setUserPost(doc.data().posts)
-
+                posts.push(...doc.data().posts);
             });
+            setUserPost(posts);
         } catch (error) {
-            console.log(error);
+            console.log("Error fetching user posts:", error);
         }
-    }
+    };
 
-
-    const uploadImg = () => {
-        if (!file.photoFile) return
+    const uploadImg = async () => {
+        if (!file) return;
 
         try {
             const storageRef = ref(storage, currentUserForProtectedRoutes.uid);
+            const uploadTask = uploadBytesResumable(storageRef, file);
 
-            const uploadTask = uploadBytesResumable(storageRef, file.photoFile);
-
-            uploadTask.on('state_changed',
+            uploadTask.on(
+                "state_changed",
                 null,
                 (error) => {
-                    console.log(error);
+                    console.log("Error uploading image:", error);
                 },
-                () => {
-
-                    getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-                        await updateProfile(currentUserForProtectedRoutes, {
-                            photoURL: downloadURL
-                        })
-                        await updateDoc(doc(fireDB, 'users', currentUserForProtectedRoutes.uid), {
-                            profilePicUrl: currentUserForProtectedRoutes.photoURL
-                        })
-                        window.location.reload()
+                async () => {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    await updateProfile(currentUserForProtectedRoutes, {
+                        photoURL: downloadURL,
                     });
+                    await doc(fireDB, "users", currentUserForProtectedRoutes.uid).update({
+                        profilePicUrl: downloadURL,
+                    });
+                    window.location.reload();
                 }
             );
         } catch (error) {
-            console.log(error);
+            console.log("Error uploading image:", error);
         }
-
-    }
+    };
 
     useEffect(() => {
-        getPost()
-    }, [userPost])
+        getPost();
+    }, [currentUserForProtectedRoutes.uid]); // Fetch posts when user ID changes
+
 
     return (
 
@@ -109,7 +104,8 @@ function ProfilePage() {
                                 {userPost? userPost.map((post, index) => {
                                     return (
                                         <div key={index} className=" border   m-1">
-                                            <img src={post.postImage} className=" w-full md:w-[300px] md:h-[300px]" alt="" />
+                                            <img src={post?.postImage} className=" w-full md:w-[300px] md:h-[300px]" alt="" />
+                                            {console.log(post.postImage)}
                                         </div>
                                     )
                                 }):null}
