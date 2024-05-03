@@ -106,13 +106,13 @@ function ProfilePage() {
 
                             <div className=" flex flex-wrap">
 
-                                {userPost.map((post, index) => {
+                                {userPost? userPost.map((post, index) => {
                                     return (
-                                        <div key={index} className=" border border-black  m-1">
+                                        <div key={index} className="  m-1">
                                             <img src={post.postImage} className=" w-full md:w-[300px] md:h-[300px]" alt="" />
                                         </div>
                                     )
-                                })}
+                                }):null}
 
 
                             </div>
