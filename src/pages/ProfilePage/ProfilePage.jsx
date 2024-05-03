@@ -108,7 +108,7 @@ function ProfilePage() {
 
                                 {userPost? userPost.map((post, index) => {
                                     return (
-                                        <div key={index} className="  m-1">
+                                        <div key={index} className=" border   m-1">
                                             <img src={post.postImage} className=" w-full md:w-[300px] md:h-[300px]" alt="" />
                                         </div>
                                     )
