@@ -9,7 +9,7 @@ import { fireDB, storage } from "../../firebase/firebaseConfig";
 
 function ProfilePage() {
     const { currentUser, currentUserForProtectedRoutes } = useContext(MyContext)
-   
+
     const [file, setFile] = useState({
         photoFile: ''
     })
@@ -23,6 +23,8 @@ function ProfilePage() {
                 posts.push(...doc.data().posts);
             });
             setUserPost(posts);
+            
+              
         } catch (error) {
             console.log("Error fetching user posts:", error);
         }
@@ -101,14 +103,14 @@ function ProfilePage() {
 
                             <div className=" flex flex-wrap">
 
-                                {userPost? userPost.map((post, index) => {
+                                {userPost ? userPost.map((post, index) => {
                                     return (
                                         <div key={index} className=" border   m-1">
                                             <img src={post?.postImage} className=" w-full md:w-[300px] md:h-[300px]" alt="" />
                                             {console.log(post.postImage)}
                                         </div>
                                     )
-                                }):null}
+                                }) : null}
 
 
                             </div>

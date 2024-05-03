@@ -7,7 +7,7 @@ function SearchSection() {
     const handleOpen = () => setOpen(!open);
 
     return (
-       <div className=" bg-transparent">
+       <div className=" bg-transparent ">
             <Button
                 type="button"
                 onClick={handleOpen}
@@ -16,7 +16,7 @@ function SearchSection() {
                 <li className="  text-[20px] font-medium"><i className="  text-[25px] mr-2 fa-solid fa-magnifying-glass"></i> <span className=" hidden xl:inline-block">Search</span></li>
 
             </Button>
-            <Dialog open={open} handler={handleOpen} className=" ">
+            <Dialog open={open} handler={handleOpen} className=" max-w-[400px] mx-auto ">
                 <DialogBody className="">
                     <div className="mb-3">
                         <input
