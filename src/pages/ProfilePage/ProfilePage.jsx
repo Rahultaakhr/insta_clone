@@ -1,18 +1,36 @@
 import PageLayout from "../../components/PageLayout";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Spinner } from "@material-tailwind/react";
 import { updateProfile } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { MyContext } from "../../context/MyContext";
 import { fireDB, storage } from "../../firebase/firebaseConfig";
 
 function ProfilePage() {
     const { currentUser, currentUserForProtectedRoutes } = useContext(MyContext)
-    console.log(currentUser?.followers?.length);
+   
     const [file, setFile] = useState({
         photoFile: ''
     })
+    const [userPost, setUserPost] = useState([])
+
+    const getPost = async () => {
+        try {
+
+
+            const querySnapshot = await getDocs(collection(fireDB, "users"), where("uId", "==", currentUserForProtectedRoutes.uid));
+            querySnapshot.forEach((doc) => {
+
+                setUserPost(doc.data().posts)
+
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
     const uploadImg = () => {
         if (!file.photoFile) return
 
@@ -45,6 +63,10 @@ function ProfilePage() {
 
     }
 
+    useEffect(() => {
+        getPost()
+    }, [userPost])
+
     return (
 
         <PageLayout>
@@ -56,7 +78,7 @@ function ProfilePage() {
                         <div className="  rounded-full overflow-hidden ">
                             <input type="file" name="" id="file" onChange={(e) => { setFile({ ...file, photoFile: e.target.files[0] }) }} hidden />
                             <label htmlFor="file">
-                                <img  className=" w-[90px]  md:w-[130px] h-[90px] md:h-[130px]" src={currentUser.profilePicUrl ? currentUser.profilePicUrl : 'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'} alt="" />
+                                <img className=" w-[90px]  md:w-[130px] h-[90px] md:h-[130px]" src={currentUser.profilePicUrl ? currentUser.profilePicUrl : 'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'} alt="" />
                             </label>
                         </div>
 
@@ -83,27 +105,14 @@ function ProfilePage() {
                             <h2 className=" text-center py-2 font-semibold">POSTS</h2>
 
                             <div className=" flex flex-wrap">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW4AdHQ5lVM_cFZYu4TogVtmEfYH4iHSGwYQ&s" className=" w-full sm:w-[100%] md:w-[320px] h-[300px] m-1" alt="" />
 
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW4AdHQ5lVM_cFZYu4TogVtmEfYH4iHSGwYQ&s" className=" w-full sm:w-[100%] md:w-[320px] h-[300px] m-1" alt="" />
-
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW4AdHQ5lVM_cFZYu4TogVtmEfYH4iHSGwYQ&s" className=" w-full sm:w-[100%] md:w-[320px] h-[300px] m-1" alt="" />
-
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW4AdHQ5lVM_cFZYu4TogVtmEfYH4iHSGwYQ&s" className=" w-full sm:w-[100%] md:w-[320px] h-[300px] m-1" alt="" />
-
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW4AdHQ5lVM_cFZYu4TogVtmEfYH4iHSGwYQ&s" className=" w-full sm:w-[100%] md:w-[320px] h-[300px] m-1" alt="" />
-
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW4AdHQ5lVM_cFZYu4TogVtmEfYH4iHSGwYQ&s" className=" w-full sm:w-[100%] md:w-[320px] h-[300px] m-1" alt="" />
-
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW4AdHQ5lVM_cFZYu4TogVtmEfYH4iHSGwYQ&s" className=" w-full sm:w-[100%] md:w-[320px] h-[300px] m-1" alt="" />
-
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW4AdHQ5lVM_cFZYu4TogVtmEfYH4iHSGwYQ&s" className=" w-full sm:w-[100%] md:w-[320px] h-[300px] m-1" alt="" />
-
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW4AdHQ5lVM_cFZYu4TogVtmEfYH4iHSGwYQ&s" className=" w-full sm:w-[100%] md:w-[320px] h-[300px] m-1" alt="" />
-
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW4AdHQ5lVM_cFZYu4TogVtmEfYH4iHSGwYQ&s" className=" w-full sm:w-[100%] md:w-[320px] h-[300px] m-1" alt="" />
-
-
+                                {userPost.map((post, index) => {
+                                    return (
+                                        <div key={index} className=" border border-black  m-1">
+                                            <img src={post.postImage} className=" w-full md:w-[300px] md:h-[300px]" alt="" />
+                                        </div>
+                                    )
+                                })}
 
 
                             </div>

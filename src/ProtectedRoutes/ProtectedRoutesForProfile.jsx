@@ -5,7 +5,7 @@ import { MyContext } from "../context/MyContext";
 function ProtectedRoutesForProfile({children}) {
     const {currentUserForProtectedRoutes}=useContext(MyContext)
     const navigate=useNavigate()
-    console.log(currentUserForProtectedRoutes);
+   
     useEffect(() => {
      if (!currentUserForProtectedRoutes) {
         navigate("/login")
