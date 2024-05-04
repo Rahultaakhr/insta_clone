@@ -3,16 +3,19 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button, Spinner } from "@material-tailwind/react";
 import { updateProfile } from "firebase/auth";
 import { collection, doc, getDoc, getDocs, onSnapshot, query, updateDoc, where } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
+import { v4 as uuid } from "uuid";
 import { MyContext } from "../../context/MyContext";
 import { fireDB, storage } from "../../firebase/firebaseConfig";
 
 function ProfilePage() {
     const { currentUser, currentUserForProtectedRoutes } = useContext(MyContext)
 
-    const [file, setFile] = useState({
-        photoFile: ''
-    })
+    const [file, setFile] = useState(
+        {
+            photoFile:""
+        }
+    )
     const [userPost, setUserPost] = useState([])
 
     const getPost = async () => {
@@ -35,7 +38,7 @@ function ProfilePage() {
 
         try {
             const storageRef = ref(storage, currentUserForProtectedRoutes.uid);
-            const uploadTask = uploadBytesResumable(storageRef, file);
+            const uploadTask = uploadBytesResumable(storageRef, file.photoFile);
 
             uploadTask.on(
                 "state_changed",
@@ -107,7 +110,7 @@ function ProfilePage() {
                                     return (
                                         <div key={index} className=" border   m-1">
                                             <img src={post?.postImage} className=" w-full md:w-[300px] md:h-[300px]" alt="" />
-                                            {console.log(post.postImage)}
+                                           
                                         </div>
                                     )
                                 }) : null}
