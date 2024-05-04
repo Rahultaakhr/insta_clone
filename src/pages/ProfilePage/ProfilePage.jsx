@@ -48,9 +48,9 @@ function ProfilePage() {
                     await updateProfile(currentUserForProtectedRoutes, {
                         photoURL: downloadURL,
                     });
-                    await doc(fireDB, "users", currentUserForProtectedRoutes.uid).update({
+                    await updateDoc(doc(fireDB, "users", currentUserForProtectedRoutes.uid),{
                         profilePicUrl: downloadURL,
-                    });
+                    })
                     window.location.reload();
                 }
             );

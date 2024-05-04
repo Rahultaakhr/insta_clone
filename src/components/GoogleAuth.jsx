@@ -11,6 +11,8 @@ function GoogleAuth() {
     try {
       const user = await signInWithPopup(auth, provider)
       console.log(user);
+
+      
       navigate("/")
 
     } catch (error) {
