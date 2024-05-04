@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Dialog, DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { arrayUnion, collection, doc, onSnapshot, query, updateDoc, where } from "firebase/firestore";
+import { useDispatch, useSelector } from "react-redux";
+import { MyContext } from "../context/MyContext";
 import { fireDB } from "../firebase/firebaseConfig";
+import { followUser, unfollowUser } from "../redux/userSlice";
 
 function SearchSection() {
     const [open, setOpen] = useState(false);
@@ -9,6 +12,46 @@ function SearchSection() {
     const handleOpen = () => setOpen(!open);
     const [userSearch, setUserSearch] = useState('')
     const [userList, setUserList] = useState([])
+    const { currentUser, currentUserForProtectedRoutes } = useContext(MyContext)
+    const [followUsers, setFollowUsers] = useState(null)
+
+    const currentUsers = useSelector((state) => state.user); // Assuming user slice is under 'user'
+    const dispatch = useDispatch();
+
+
+
+    const handleFollow = async (user) => {
+        dispatch(followUser(user));
+
+         setFollowUsers({...followUsers,followUsers:currentUsers.follows})
+
+    await updateDoc(doc(fireDB,"users",currentUserForProtectedRoutes.uid),{
+        following:followUsers
+    })
+    console.log();
+       
+       
+
+   
+
+        // Dispatch followUser action with user ID
+    };
+
+    const handleUnfollow = async (user) => {
+        dispatch(unfollowUser(user));
+        
+        setFollowUsers({...followUsers,followUsers:currentUsers.follows})
+
+        await updateDoc(doc(fireDB,"users",currentUserForProtectedRoutes.uid),{
+            following:followUsers
+        })
+           
+       
+       
+
+        // Dispatch unfollowUser action with user ID
+    };
+
 
     const handleSearch = () => {
         try {
@@ -33,10 +76,10 @@ function SearchSection() {
         }
     }
 
-
     useEffect(() => {
 
     }, [])
+
 
 
 
@@ -96,7 +139,35 @@ function SearchSection() {
 
                                     </div>
                                     <div>
-                                        <button className=" text-black font-bold">Follow</button>
+
+                                        {/* {isFollowing ? (
+                                              <button className=" text-black font-bold" onClick={() => {
+                                                handleUnfollow(user)
+                                            }}>Follow</button>
+                                        ) : (
+                                            <button className=" text-black font-bold" onClick={() => {
+                                                handleFollow(user)
+                                            }}>Follow</button>
+                                        )} */}
+
+
+                                        {currentUsers.follows.includes(user) ?
+
+                                            <button className=" text-black font-bold" onClick={() => {
+                                                handleUnfollow(user)
+                                                console.log(currentUsers.follows);
+
+                                            }}>Unfollow</button> :
+
+                                            <button className=" text-black font-bold" onClick={async() => {
+                                               await handleFollow(user)
+                                                console.log(currentUsers.follows)
+
+                                            }}>Follow</button>
+
+                                        }
+
+
                                     </div>
                                 </div>
                             )
