@@ -13,7 +13,7 @@ function SearchSection() {
     const [userSearch, setUserSearch] = useState('')
     const [userList, setUserList] = useState([])
     const { currentUser, currentUserForProtectedRoutes } = useContext(MyContext)
-    const [followUsers, setFollowUsers] = useState(null)
+    const [followUsers, setFollowUsers] = useState([])
 
     const currentUsers = useSelector((state) => state.user); // Assuming user slice is under 'user'
     const dispatch = useDispatch();
@@ -23,31 +23,27 @@ function SearchSection() {
     const handleFollow = async (user) => {
         dispatch(followUser(user));
 
-         setFollowUsers({...followUsers,followUsers:currentUsers.follows})
-
-    await updateDoc(doc(fireDB,"users",currentUserForProtectedRoutes.uid),{
-        following:followUsers
-    })
-    console.log();
-       
+        setFollowUsers(...currentUsers.follows)
        
 
-   
-
-        // Dispatch followUser action with user ID
+        await updateDoc(doc(fireDB, "users", currentUserForProtectedRoutes.uid), {
+            following: (currentUsers.follows)
+        })
+        console.log();
     };
 
     const handleUnfollow = async (user) => {
         dispatch(unfollowUser(user));
-        
-        setFollowUsers({...followUsers,followUsers:currentUsers.follows})
 
-        await updateDoc(doc(fireDB,"users",currentUserForProtectedRoutes.uid),{
-            following:followUsers
+        setFollowUsers(...currentUsers.follows )
+        console.log(followUsers);
+
+        await updateDoc(doc(fireDB, "users", currentUserForProtectedRoutes.uid), {
+            following: (currentUsers.follows)
         })
-           
-       
-       
+
+
+
 
         // Dispatch unfollowUser action with user ID
     };
@@ -159,8 +155,8 @@ function SearchSection() {
 
                                             }}>Unfollow</button> :
 
-                                            <button className=" text-black font-bold" onClick={async() => {
-                                               await handleFollow(user)
+                                            <button className=" text-black font-bold" onClick={async () => {
+                                                await handleFollow(user)
                                                 console.log(currentUsers.follows)
 
                                             }}>Follow</button>
