@@ -6,12 +6,14 @@ import toast from "react-hot-toast";
 import { collapse } from "@material-tailwind/react";
 import { data } from "autoprefixer";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { addDoc, collection, doc, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { Link, useNavigate } from "react-router-dom";
 import { auth, fireDB } from "../../firebase/firebaseConfig";
 
 function Signup() {
   const navigate = useNavigate()
+  const [err, setErr] = useState(false)
+  const [errMess, setErrMess] = useState("")
 
   const [userSignup, setUserSignup] = useState({
     name: '',
@@ -26,6 +28,15 @@ function Signup() {
 
     }
 
+
+    const q = query(collection(fireDB, "users"), where("displayName", "==", userSignup.userName));
+
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+     return toast.error("username already exists")
+      
+    }
+  
 
 
     try {
@@ -60,7 +71,10 @@ function Signup() {
       })
       navigate("/login")
 
+
     } catch (error) {
+     
+      setErrMess("Error" +error.message)
       console.log(error);
     }
   }
@@ -108,6 +122,8 @@ function Signup() {
                       setUserSignup({ ...userSignup, password: e.target.value })
                     }}
                   />
+
+        <div className=" ">{errMess}</div>
                   <button className=" w-full bg-blue-300 font-semibold text-white rounded-md p-2 mt-1" onClick={userSignupfunction}>Sign up</button>
                 </div>
 

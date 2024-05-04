@@ -2,7 +2,7 @@ import PageLayout from "../../components/PageLayout";
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Spinner } from "@material-tailwind/react";
 import { updateProfile } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, onSnapshot, query, updateDoc, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { v4 as uuid } from "uuid";
 import { MyContext } from "../../context/MyContext";

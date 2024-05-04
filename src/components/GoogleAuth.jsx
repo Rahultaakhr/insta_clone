@@ -1,17 +1,43 @@
 import React from "react";
 import google from "../assets/google.png";
 import { signInWithPopup } from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { auth, provider } from "../firebase/firebaseConfig";
+import { auth, fireDB, provider } from "../firebase/firebaseConfig";
 
 function GoogleAuth() {
   const navigate = useNavigate()
+  
 
   const handleGoogleAuth = async () => {
     try {
       const user = await signInWithPopup(auth, provider)
-      console.log(user);
+     
+      const q =doc(fireDB,"users",user.user.uid)
 
+      const querySnapshot = await getDoc(q);
+      if (querySnapshot.exists()) {
+       console.log("Exists");
+      }
+      else{
+        await setDoc(doc(fireDB, "users", user.user.uid), {
+          name: user.user.displayName,
+          displayName:user.user.email.split('@')[0] ,
+          uId: user.user.uid,
+          followers: [],
+          following: [],
+          posts: [],
+          date: new Date().toLocaleString("en-US", {
+            month: 'short',
+            day: '2-digit',
+            year: "numeric"
+          }),
+          profilePicUrl: user.user.photoURL,
+          email: user.user.email,
+  
+  
+        })
+      }
       
       navigate("/")
 

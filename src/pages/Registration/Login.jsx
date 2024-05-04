@@ -9,6 +9,7 @@ import { auth } from "../../firebase/firebaseConfig";
 
 function Login() {
   const navigate=useNavigate()
+  const [errMess, setErrMess] = useState("")
   const [userLogin, setUserLogin] = useState(
     {
       email:'',
@@ -30,6 +31,7 @@ function Login() {
       navigate("/")
     } catch (error) {
       console.log(error);
+      setErrMess("Error" +error.message)
     }
   }
   return (
@@ -64,6 +66,7 @@ function Login() {
                       setUserLogin({...userLogin,password:e.target.value})
                     }}
                   />
+                   <div className=" ">{errMess}</div>
                   <button className=" w-full bg-blue-300 font-semibold text-white rounded-md p-2 mt-1"
                   onClick={userLoginFunction}>Login</button>
                 </div>

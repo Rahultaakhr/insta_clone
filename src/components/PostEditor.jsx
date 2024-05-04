@@ -15,7 +15,7 @@ const PostEditor = () => {
     const [postCaption, setpostCaption] = useState('')
 
 
-    const { currentUserForProtectedRoutes } = useContext(MyContext)
+    const { currentUserForProtectedRoutes,currentUser } = useContext(MyContext)
     const [open, setOpen] = React.useState(false);
    
     const handleOpen = () => setOpen(!open);
@@ -73,7 +73,7 @@ const PostEditor = () => {
                             ),
                             uId:currentUserForProtectedRoutes.uid,
                             Dp:currentUserForProtectedRoutes.photoURL,
-                            userName:currentUserForProtectedRoutes.displayName
+                            userName:currentUser.displayName
                         }
                         await updateDoc(doc(fireDB, "users", currentUserForProtectedRoutes.uid), {
                             posts: arrayUnion(post)
