@@ -13,6 +13,7 @@ function Suggestion({ className }) {
   const { userLogoutFuntion, currentUser,currentUserForProtectedRoutes } = useContext(MyContext)
 
 
+
  
 
   return (
@@ -25,7 +26,7 @@ function Suggestion({ className }) {
               <img className=" w-[60px] h-[60px] rounded-full" src={currentUser.profilePicUrl ? currentUser.profilePicUrl:'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'} alt="" />
         
             <div>
-              <h2 className=" font-semibold">{currentUserForProtectedRoutes.displayName}</h2>
+              <h2 className=" font-semibold">{currentUser.displayName}</h2>
               <p>{currentUser.name}</p>
             </div>
           </div>
