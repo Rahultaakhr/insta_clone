@@ -13,7 +13,7 @@ const userSlice = createSlice({
     reducers: {
         followUser(state, action) {
             state.follows.push(action.payload);
-            console.log(action.payload.uId);
+            console.log(action.payload);
         },
         unfollowUser(state, action) {
             state.follows = state.follows.filter((user)=>{

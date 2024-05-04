@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Dialog, DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react";
-import { arrayUnion, collection, doc, onSnapshot, query, updateDoc, where } from "firebase/firestore";
+import { arrayUnion, collection, doc, getDoc, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { MyContext } from "../context/MyContext";
 import { fireDB } from "../firebase/firebaseConfig";
@@ -13,7 +13,9 @@ function SearchSection() {
     const [userSearch, setUserSearch] = useState('')
     const [userList, setUserList] = useState([])
     const { currentUser, currentUserForProtectedRoutes } = useContext(MyContext)
-    const [followUsers, setFollowUsers] = useState([])
+    const [followUsers, setFollowUsers] = useState({
+        following: []
+    })
 
     const currentUsers = useSelector((state) => state.user); // Assuming user slice is under 'user'
     const dispatch = useDispatch();
@@ -23,30 +25,46 @@ function SearchSection() {
     const handleFollow = async (user) => {
         dispatch(followUser(user));
 
-        setFollowUsers(...currentUsers.follows)
-       
+        setFollowUsers({ ...followUsers, following: currentUsers.follows })
+        console.log(followUsers.following);
 
-        await updateDoc(doc(fireDB, "users", currentUserForProtectedRoutes.uid), {
-            following: (currentUsers.follows)
+        await updateDoc(doc(fireDB,'users',currentUserForProtectedRoutes.uid),{
+            following:followUsers.following
         })
-        console.log();
+
     };
 
     const handleUnfollow = async (user) => {
         dispatch(unfollowUser(user));
 
-        setFollowUsers(...currentUsers.follows )
-        console.log(followUsers);
 
-        await updateDoc(doc(fireDB, "users", currentUserForProtectedRoutes.uid), {
-            following: (currentUsers.follows)
+        setFollowUsers({ ...followUsers, following: currentUsers.follows })
+        // console.log(followUsers);
+
+        await updateDoc(doc(fireDB,'users',currentUserForProtectedRoutes.uid),{
+            following:followUsers.following
         })
-
-
 
 
         // Dispatch unfollowUser action with user ID
     };
+    const getUserFollowing = async () => {
+        try {
+            const q = query(
+                collection(fireDB, "users"),
+                where('uId', '==', currentUserForProtectedRoutes.uid)
+            )
+            const data = onSnapshot(q, (QuerySnapshot) => {
+                QuerySnapshot.forEach((doc) => {
+                   
+                    setFollowUsers({...followUser,following:doc.data().following})
+                })
+            })
+            return data
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
     const handleSearch = () => {
@@ -73,8 +91,10 @@ function SearchSection() {
     }
 
     useEffect(() => {
+        getUserFollowing()
+        
 
-    }, [])
+    }, [currentUserForProtectedRoutes.uid])
 
 
 
@@ -149,15 +169,15 @@ function SearchSection() {
 
                                         {currentUsers.follows.includes(user) ?
 
-                                            <button className=" text-black font-bold" onClick={() => {
-                                                handleUnfollow(user)
-                                                console.log(currentUsers.follows);
+                                            <button className=" text-black font-bold" onClick={async() => {
+                                               await handleUnfollow(user)
+                                                console.log(followUsers.following);
 
                                             }}>Unfollow</button> :
 
                                             <button className=" text-black font-bold" onClick={async () => {
                                                 await handleFollow(user)
-                                                console.log(currentUsers.follows)
+                                              console.log(followUsers.following);
 
                                             }}>Follow</button>
 

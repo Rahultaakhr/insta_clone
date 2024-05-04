@@ -12,11 +12,15 @@ function TimeLine({ className }) {
     const q = query(collection(fireDB, 'users'))
     const data = onSnapshot(q, (QuerySnapshot) => {
       let userList = []
+      let postList = []
       QuerySnapshot.forEach((doc) => {
-        userList.push(doc.data().posts)
+        userList.push(doc.data())
+        postList.push(doc.data().posts)
       })
-      setArr(userList.flat(Infinity))
-      console.log(arr);
+     
+      setArr(userList)
+      setallPosts(postList.flat(Infinity))
+     
     })
     return data
 
@@ -33,52 +37,49 @@ function TimeLine({ className }) {
 
         <div className=" w-full  ">
           <div className=" w-full flex flex-col items-center">
-            {arr.map((list, index) => {
-              // <div key={index} className=" my-3 h-[550px] flex flex-col w-full sm:w-[70%]   ">
+          {allPosts.map((post,index)=>{
+                  return(
+                    <div key={index} className=" my-3 h-[550px] flex flex-col w-full sm:w-[70%]   ">
 
-              //   <div className=" h-[50px] w-full bg-black flex items-center gap-3">
-
-              //     <img className="w-[40px] h-[40px] rounded-full" src="https://cdn.123telugu.com/content/wp-content/uploads/2024/02/OG-2.jpg" alt="" />
-
-              //     <div className=" text-white  flex gap-2"><h2 className=" font-semibold">rahu_l_hr</h2> <span className=" text-gray-300 font-normal ">• 2d</span></div>
-              //   </div>
-              //   <div className=" w-full flex-1 h-full">
-              //     <img className=" w-full  h-full" src="https://images.hindustantimes.com/img/2021/11/01/1600x900/aryan_khan__1635758389942_1635758397831.png" alt="" />
-
-
-              //   </div>
-
-
-              //   <div className=" flex  flex-col  p-1 text-[22px]">
-              //     {like ? <i className="fa-regular fa-heart" onClick={() => {
-              //       setLike(false)
-              //       setLikeCount(() => (likeCount + 1))
-
-              //     }}></i> : <i className="fa-solid fa-heart"
-              //       onClick={() => {
-              //         setLike(true)
-              //         setLikeCount(() => (likeCount - 1))
-              //       }}
-              //     ></i>}
-              //     <p className=" text-[16px] font-medium">{likeCount} likes</p>
-              //   </div>
-
-
-
-              //   <div className=" flex ">
-              //     <h1 className="font-semibold">rahu_l_hr</h1>
-              //     <p className=" px-1">Caption</p>
-              //   </div>
-
-              //   <div className=" mt-2 border border-gray-200">
-              //   </div>
-              // </div>
-
-         console.log(index,list);
-          
-          
-
-            })}
+                    <div className=" h-[50px] w-full bg-black flex items-center gap-3">
+  
+                      <img className="w-[40px] h-[40px] rounded-full" src={post.Dp} alt="" />
+  
+                      <div className=" text-white  flex gap-2"><h2 className=" font-semibold">{post.userName}</h2> <span className=" text-gray-300 font-normal ">• {post.createdAt}</span></div>
+                    </div>
+                    <div className=" w-full flex-1 h-full overflow-hidden">
+                      <img className=" w-full  h-full object-fill" src={post.postImage}  alt="" />
+  
+  
+                    </div>
+  
+  
+                    <div className=" flex  flex-col  p-1 text-[22px]">
+                      {like ? <i className="fa-regular fa-heart" onClick={() => {
+                        setLike(false)
+                        setLikeCount(() => (likeCount + 1))
+  
+                      }}></i> : <i className="fa-solid fa-heart"
+                        onClick={() => {
+                          setLike(true)
+                          setLikeCount(() => (likeCount - 1))
+                        }}
+                      ></i>}
+                      <p className=" text-[16px] font-medium">{likeCount} likes</p>
+                    </div>
+  
+  
+  
+                    <div className=" flex ">
+                      <h1 className="font-semibold">{post.userName}</h1>
+                     {post.postCaption &&  <p className=" px-1">{   post.postCaption}</p>}
+                    </div>
+  
+                    <div className=" mt-2 border border-gray-200">
+                    </div>
+                  </div>
+                  )
+                })}
           </div>
         </div>
 

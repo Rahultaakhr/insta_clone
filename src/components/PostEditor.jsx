@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Button, Dialog, DialogBody } from "@material-tailwind/react";
-import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { formatDistanceToNow } from "date-fns";
+import { Timestamp, arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { v4 as uuid } from "uuid";
 import { MyContext } from "../context/MyContext";
@@ -61,7 +62,18 @@ const PostEditor = () => {
                         // setPost({...post,image:downloadURL})
                         const post = {
                             postImage: downloadURL,
-                            postCaption: postCaption
+                            postCaption: postCaption,
+                            
+                            createdAt:new Date().toLocaleString("en-US",
+                                {
+                                    month:"short",
+                                    day:'2-digit',
+                                    year:'numeric'
+                                }
+                            ),
+                            uId:currentUserForProtectedRoutes.uid,
+                            Dp:currentUserForProtectedRoutes.photoURL,
+                            userName:currentUserForProtectedRoutes.displayName
                         }
                         await updateDoc(doc(fireDB, "users", currentUserForProtectedRoutes.uid), {
                             posts: arrayUnion(post)
