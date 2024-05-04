@@ -6,7 +6,7 @@ function TimeLine({ className }) {
   const [like, setLike] = useState(false)
   const [likeCount, setLikeCount] = useState(200)
   const [arr, setArr] = useState([])
-  const [allPosts, setallPosts] = useState([])
+  const [allPosts, setAllPosts] = useState([])
 
   const getUsersList = async () => {
     const q = query(collection(fireDB, 'users'))
@@ -19,7 +19,8 @@ function TimeLine({ className }) {
       })
      
       setArr(userList)
-      setallPosts(postList.flat(Infinity))
+      const shuffledPosts = shuffleArray(postList.flat(Infinity));
+      setAllPosts(shuffledPosts);
      
     })
     return data
@@ -29,6 +30,14 @@ function TimeLine({ className }) {
     getUsersList()
 
   }, [])
+
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+    return array;
+  };
 
   return (
     <div className={`${className} flex justify-center   `}>
