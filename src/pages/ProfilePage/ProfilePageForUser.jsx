@@ -142,7 +142,7 @@ function ProfilePageForUser() {
 
                             <div className=" flex flex-wrap">
 
-                                {searchUserProfile?.posts ? searchUserProfile?.posts?.map((post, index) => {
+                                {searchUserProfile?.posts ? searchUserProfile?.posts.reverse()?.map((post, index) => {
                                     return (
                                         <div key={index} className=" border h-[350px] md:h-auto  w-full sm:w-[90%] md:w-auto overflow-hidden  m-1">
                                         <img src={post?.postImage} className=" w-full  h-full   md:w-[300px] md:h-[300px]" alt="" />
