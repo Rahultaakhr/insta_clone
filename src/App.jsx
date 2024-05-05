@@ -1,6 +1,7 @@
 import Home from "./pages/Home/Home";
 import Login from "./pages/Registration/Login";
 import MyState from "./context/MyState";
+import NoPage from "./pages/NoPage/NoPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import ProfilePageForUser from "./pages/ProfilePage/ProfilePageForUser";
 import ProtectedRoutesForHome from "./ProtectedRoutes/ProtectedRoutesForHome";
@@ -33,6 +34,7 @@ function App() {
             <Route path="/profile" element={<ProtectedRoutesForProfile>
               <ProfilePage />
             </ProtectedRoutesForProfile>} />
+            <Route path="/*" element={<NoPage />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
           </Routes>
