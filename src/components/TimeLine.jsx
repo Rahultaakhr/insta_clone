@@ -54,7 +54,7 @@ function TimeLine({ className }) {
   
                       <img className="w-[40px] h-[40px] rounded-full" src={post?.Dp} alt="" />
   
-                      <div className=" text-white  flex gap-2"><h2 className=" font-semibold">{post?.userName}</h2> <span className=" text-gray-300 font-normal ">• {post?.createdAt}</span></div>
+                      <div className=" text-white  items-center   flex gap-2"><h2 className=" font-semibold break-words ">{post?.userName}</h2> <span className=" text-gray-300 font-normal text-[13px] text-wrap ">• {post?.createdAt}</span></div>
                     </div>
                     <div className=" w-full flex-1 h-full overflow-hidden">
                       <img className=" w-full  h-full object-fill" src={post?.postImage}  alt="" />
