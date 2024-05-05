@@ -1,49 +1,39 @@
-import Home from "./pages/Home/Home";
-import Login from "./pages/Registration/Login";
 import MyState from "./context/MyState";
-import NoPage from "./pages/NoPage/NoPage";
-import ProfilePage from "./pages/ProfilePage/ProfilePage";
-import ProfilePageForUser from "./pages/ProfilePage/ProfilePageForUser";
-import ProtectedRoutesForHome from "./ProtectedRoutes/ProtectedRoutesForHome";
-import ProtectedRoutesForProfile from "./ProtectedRoutes/ProtectedRoutesForProfile";
-import Signup from "./pages/Registration/Signup";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import React, { Suspense } from "react";
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-// import './App.css'
+// Lazy-loaded components
+const Home = React.lazy(() => import('./pages/Home/Home'));
+const Login = React.lazy(() => import('./pages/Registration/Login'));
+const NoPage = React.lazy(() => import('./pages/NoPage/NoPage'));
+const ProfilePage = React.lazy(() => import('./pages/ProfilePage/ProfilePage'));
+const ProfilePageForUser = React.lazy(() => import('./pages/ProfilePage/ProfilePageForUser'));
+const ProtectedRoutesForHome = React.lazy(() => import('./ProtectedRoutes/ProtectedRoutesForHome'));
+const ProtectedRoutesForProfile = React.lazy(() => import('./ProtectedRoutes/ProtectedRoutesForProfile'));
+const Signup = React.lazy(() => import('./pages/Registration/Signup'));
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
-    <>
-      <MyState>
-        <BrowserRouter>
+    <MyState>
+      <BrowserRouter>
+        <Suspense fallback={<div>Loading...</div>}>
           <Routes>
-
-            <Route path="/" element={<ProtectedRoutesForHome>
-              <Home />
-            </ProtectedRoutesForHome>} />
-
-            <Route path="profile/:id" element={
-              <ProfilePageForUser />
-            } />
-            <Route path="/profile" element={<ProtectedRoutesForProfile>
-              <ProfilePage />
-            </ProtectedRoutesForProfile>} />
+            <Route path="/" element={<ProtectedRoutesForHome><Home /></ProtectedRoutesForHome>} />
+            <Route path="profile/:id" element={<ProfilePageForUser />} />
+            <Route path="/profile" element={<ProtectedRoutesForProfile><ProfilePage /></ProtectedRoutesForProfile>} />
             <Route path="/*" element={<NoPage />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
           </Routes>
-          <Toaster />
-        </BrowserRouter>
-
-      </MyState>
-    </>
-  )
+        </Suspense>
+        <Toaster />
+      </BrowserRouter>
+    </MyState>
+  );
 }
 
-export default App
+export default App;

@@ -8,26 +8,36 @@ import { v4 as uuid } from "uuid";
 import { MyContext } from "../../context/MyContext";
 import { fireDB, storage } from "../../firebase/firebaseConfig";
 
-function ProfilePage({user}) {
-    const { currentUser, currentUserForProtectedRoutes ,searchUserProfile,currentUserProfile} = useContext(MyContext)
+function ProfilePage({ user }) {
+    const { currentUser, currentUserForProtectedRoutes, searchUserProfile, currentUserProfile } = useContext(MyContext)
 
     const [file, setFile] = useState(
         {
-            photoFile:""
+            photoFile: ""
         }
     )
-    const [userPost, setUserPost] = useState([])
+    const [userPosts, setUserPosts] = useState([]);
+    const [unsubscribe, setUnsubscribe] = useState(null);
 
-    const getPost = async () => {
+    const getPosts = async () => {
         try {
-            const querySnapshot = await getDocs(query(collection(fireDB, "users"), where("uId", "==", currentUserForProtectedRoutes.uid)));
-            const posts = [];
-            querySnapshot.forEach((doc) => {
-                posts.push(...doc.data().posts);
+            const postsRef = collection(fireDB, "users");
+            const userQuery = query(postsRef, where("uId", "==", currentUserForProtectedRoutes.uid));
+
+            const unsubscribeSnapshot = onSnapshot(userQuery, (snapshot) => {
+                const posts = [];
+                snapshot.forEach((doc) => {
+                    const userData = doc.data();
+                    if (userData.posts) {
+                        userData.posts.forEach((post) => {
+                            posts.push(post);
+                        });
+                    }
+                });
+                setUserPosts(posts.reverse());
             });
-            setUserPost(posts);
-            
-              
+
+            setUnsubscribe(() => unsubscribeSnapshot); // Save the unsubscribe function
         } catch (error) {
             console.log("Error fetching user posts:", error);
         }
@@ -51,7 +61,7 @@ function ProfilePage({user}) {
                     await updateProfile(currentUserForProtectedRoutes, {
                         photoURL: downloadURL,
                     });
-                    await updateDoc(doc(fireDB, "users", currentUserForProtectedRoutes.uid),{
+                    await updateDoc(doc(fireDB, "users", currentUserForProtectedRoutes.uid), {
                         profilePicUrl: downloadURL,
                     })
                     window.location.reload();
@@ -63,7 +73,14 @@ function ProfilePage({user}) {
     };
 
     useEffect(() => {
-        getPost();
+        getPosts();
+
+        return () => {
+            if (unsubscribe) {
+                unsubscribe(); // Unsubscribe from the Firestore listener when the component unmounts
+            }
+        };
+
     }, [currentUserForProtectedRoutes.uid]); // Fetch posts when user ID changes
 
 
@@ -90,7 +107,7 @@ function ProfilePage({user}) {
                                 <Button className=" bg-black py-1 px-4" onClick={uploadImg}>Edit</Button></div>
 
                             <div className="  py-3 gap-3 flex">
-                                <p><span className=" font-bold">{currentUser.posts?.length}</span> Posts</p>
+                                <p><span className=" font-bold">{userPosts?.length}</span> Posts</p>
                                 <p><span className=" font-bold">{currentUser.followers?.length}</span> Followers</p>
                                 <p><span className=" font-bold">{currentUser.following?.length}</span> Following</p>
 
@@ -106,11 +123,11 @@ function ProfilePage({user}) {
 
                             <div className=" flex flex-wrap">
 
-                                {userPost ? userPost.map((post, index) => {
+                                {userPosts ? userPosts.map((post, index) => {
                                     return (
-                                        <div key={index} className=" border-2 h-[350px] md:h-auto border-black  w-full sm:w-[90%] md:w-auto overflow-hidden  m-1">
-                                            <img src={post?.postImage} className=" w-full  h-full   md:w-[300px] md:h-[300px]" alt="" />
-                                           
+                                        <div key={index} className=" borderh-[350px] md:h-auto  w-full sm:w-[90%] md:w-auto overflow-hidden  m-1">
+                                            <img src={post?.postImage} className=" w-full  h-[300px]   md:w-[300px] md:h-[300px]" alt="" />
+
                                         </div>
                                     )
                                 }) : null}
