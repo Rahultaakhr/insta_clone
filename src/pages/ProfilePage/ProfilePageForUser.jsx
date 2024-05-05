@@ -13,7 +13,7 @@ import { followUser, setFollowing, unfollowUser } from "../../redux/userSlice";
 
 function ProfilePageForUser() {
     const { currentUserForProtectedRoutes, searchUserProfile, setSearchUserProfile, currentUser } = useContext(MyContext)
-   
+
     const currentUsers = useSelector((state) => state.user);
     const dispatch = useDispatch()
     const { id } = useParams()
@@ -27,7 +27,7 @@ function ProfilePageForUser() {
             querySnapshot.forEach((doc) => {
                 if (doc.data().uId !== currentUserForProtectedRoutes.uid) {
                     setSearchUserProfile(doc.data())
-                   
+
                 }
                 else {
                     setSearchUserProfile(null)
@@ -66,7 +66,7 @@ function ProfilePageForUser() {
     };
 
     useEffect(() => {
-       
+
         const fetchFollowing = async () => {
             try {
                 const uid = currentUserForProtectedRoutes?.uid;
@@ -143,8 +143,8 @@ function ProfilePageForUser() {
 
                                 {searchUserProfile?.posts ? searchUserProfile?.posts?.map((post, index) => {
                                     return (
-                                        <div key={index} className=" border   m-1">
-                                            <img src={post?.postImage} className=" w-full md:w-[300px] md:h-[300px]" alt="" />
+                                        <div key={index} className=" border  w-full  m-1">
+                                            <img src={post?.postImage} className="   md:w-[300px] md:h-[300px]" alt="" />
 
                                         </div>
                                     )
