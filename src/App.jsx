@@ -2,6 +2,7 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Registration/Login";
 import MyState from "./context/MyState";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import ProfilePageForUser from "./pages/ProfilePage/ProfilePageForUser";
 import ProtectedRoutesForHome from "./ProtectedRoutes/ProtectedRoutesForHome";
 import ProtectedRoutesForProfile from "./ProtectedRoutes/ProtectedRoutesForProfile";
 import Signup from "./pages/Registration/Signup";
@@ -18,24 +19,27 @@ function App() {
 
   return (
     <>
-   <MyState>
-   <BrowserRouter>
-    <Routes>
+      <MyState>
+        <BrowserRouter>
+          <Routes>
 
-      <Route path="/" element={<ProtectedRoutesForHome>
-        <Home/>
-      </ProtectedRoutesForHome>}/>
+            <Route path="/" element={<ProtectedRoutesForHome>
+              <Home />
+            </ProtectedRoutesForHome>} />
 
-      <Route path="/profile" element={<ProtectedRoutesForProfile>
-        <ProfilePage/>
-      </ProtectedRoutesForProfile>}/>
-      <Route path="/signup" element={<Signup/>}/>
-      <Route path="/login" element={<Login/>}/>
-    </Routes>
-    <Toaster/>
-    </BrowserRouter>
-    
-   </MyState>
+            <Route path="profile/:id" element={
+              <ProfilePageForUser />
+            } />
+            <Route path="/profile" element={<ProtectedRoutesForProfile>
+              <ProfilePage />
+            </ProtectedRoutesForProfile>} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+          <Toaster />
+        </BrowserRouter>
+
+      </MyState>
     </>
   )
 }

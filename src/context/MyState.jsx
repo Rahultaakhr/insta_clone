@@ -7,6 +7,8 @@ import { MyContext } from "./MyContext";
 function MyState({ children }) {
     const [currentUser, setCurrentUser] = useState({})
     const [currentUserForProtectedRoutes, setCurrentUserForProtectedRoutes] = useState({})
+    const [searchUserProfile,setSearchUserProfile]=useState(null)
+    const [currentUserProfile,setCurrentUserProfile]=useState(null)
 
     const userLogoutFuntion = () => {
         try {
@@ -35,7 +37,7 @@ function MyState({ children }) {
     }, [])
 
     return (
-        <MyContext.Provider value={{ currentUser, userLogoutFuntion,currentUserForProtectedRoutes }}>
+        <MyContext.Provider value={{ currentUser, userLogoutFuntion,currentUserForProtectedRoutes,searchUserProfile,setSearchUserProfile,currentUserProfile,setCurrentUserProfile }}>
             {children}
         </MyContext.Provider>
     )

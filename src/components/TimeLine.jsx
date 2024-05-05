@@ -52,12 +52,12 @@ function TimeLine({ className }) {
 
                     <div className=" h-[50px] w-full bg-black flex items-center gap-3">
   
-                      <img className="w-[40px] h-[40px] rounded-full" src={post.Dp} alt="" />
+                      <img className="w-[40px] h-[40px] rounded-full" src={post?.Dp} alt="" />
   
-                      <div className=" text-white  flex gap-2"><h2 className=" font-semibold">{post.userName}</h2> <span className=" text-gray-300 font-normal ">• {post.createdAt}</span></div>
+                      <div className=" text-white  flex gap-2"><h2 className=" font-semibold">{post?.userName}</h2> <span className=" text-gray-300 font-normal ">• {post?.createdAt}</span></div>
                     </div>
                     <div className=" w-full flex-1 h-full overflow-hidden">
-                      <img className=" w-full  h-full object-fill" src={post.postImage}  alt="" />
+                      <img className=" w-full  h-full object-fill" src={post?.postImage}  alt="" />
   
   
                     </div>
@@ -80,8 +80,8 @@ function TimeLine({ className }) {
   
   
                     <div className=" flex ">
-                      <h1 className="font-semibold">{post.userName}</h1>
-                     {post.postCaption &&  <p className=" px-1">{   post.postCaption}</p>}
+                      <h1 className="font-semibold">{post?.userName}</h1>
+                     {post?.postCaption &&  <p className=" px-1">{ post?.postCaption}</p>}
                     </div>
   
                     <div className=" mt-2 border border-gray-200">

@@ -8,8 +8,8 @@ import { v4 as uuid } from "uuid";
 import { MyContext } from "../../context/MyContext";
 import { fireDB, storage } from "../../firebase/firebaseConfig";
 
-function ProfilePage() {
-    const { currentUser, currentUserForProtectedRoutes } = useContext(MyContext)
+function ProfilePage({user}) {
+    const { currentUser, currentUserForProtectedRoutes ,searchUserProfile,currentUserProfile} = useContext(MyContext)
 
     const [file, setFile] = useState(
         {
@@ -84,7 +84,7 @@ function ProfilePage() {
 
                         <div className="  w-auto max-w-[400px] overflow-hidden  h-auto max-h-[300px]  md:p-7 p-3">
                             <div className=" flex justify-between"> <h1 className=" font-bold">{
-                                currentUser.displayName
+                                currentUser?.displayName
                             }</h1>
 
                                 <Button className=" bg-black py-1 px-4" onClick={uploadImg}>Edit</Button></div>
