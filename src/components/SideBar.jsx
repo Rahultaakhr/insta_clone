@@ -10,7 +10,7 @@ import { MyContext } from "../context/MyContext";
 function SideBar({ className }) {
     const navigate = useNavigate()
     const { userLogoutFuntion } = useContext(MyContext)
-    const{currentUser,setCurrentUserProfile}=useContext(MyContext)
+    const { currentUser, setCurrentUserProfile } = useContext(MyContext)
 
 
     return (
@@ -22,15 +22,23 @@ function SideBar({ className }) {
                         <li className=" py-3 text-[20px] font-medium" onClick={() => { navigate("/") }}><i className="  text-[25px] mr-2 fa-solid fa-house"></i> <span className=" hidden xl:inline-block">Home</span></li>
                         <SearchSection />
                         {/* <li className=" py-3 text-[20px] font-medium"><i className="  text-[25px] mr-2 fa-solid fa-magnifying-glass"></i> <span className=" hidden xl:inline-block">Search</span></li> */}
-                        <li className=" py-3 text-[20px] font-medium"><i className="  text-[25px] mr-2 fa-regular fa-compass"></i> <span className=" hidden xl:inline-block">Explore</span></li>
-                        <li className=" py-3 text-[20px] font-medium items-center flex"> <span><img className=" mr-3 w-[28px]" src={reelsIcon} alt="" /> </span><span className=" hidden xl:inline-block">Reels</span></li>
-                        <li className=" py-3 text-[20px] font-medium"><i className="  text-[25px] mr-2 fa-brands fa-facebook-messenger"></i> <span className=" hidden xl:inline-block">Messages</span></li>
-                        <li className=" py-3 text-[20px] font-medium"><i className="  text-[25px] mr-2 fa-regular fa-heart"></i> <span className=" hidden xl:inline-block">Notifications</span></li>
+                        <li className=" py-3 text-[20px] font-medium" onClick={()=>{
+                            navigate('/explore')
+                        }}><i className="  text-[25px] mr-2 fa-regular fa-compass"></i> <span className=" hidden xl:inline-block">Explore</span></li>
+                        <li className=" py-3 text-[20px] font-medium items-center flex" onClick={()=>{
+                            navigate('/reels')
+                        }}> <span><img className=" mr-3 w-[28px]" src={reelsIcon} alt="" /> </span><span className=" hidden xl:inline-block">Reels</span></li>
+                        <li className=" py-3 text-[20px] font-medium" onClick={()=>{
+                            navigate('/message')
+                        }}><i className="  text-[25px] mr-2 fa-brands fa-facebook-messenger"></i> <span className=" hidden xl:inline-block">Messages</span></li>
+                        <li className=" py-3 text-[20px] font-medium" onClick={() => {
+                            navigate('/notification')
+                        }}><i className="  text-[25px] mr-2 fa-regular fa-heart"></i> <span className=" hidden xl:inline-block">Notifications</span></li>
                         <PostEditor />
                         {/* <li className=" py-3 text-[20px] font-medium" onClick={()=>(<PostEditor/>)}><i className="  text-[25px] mr-2 fa-regular fa-square-plus"></i> <span className=" hidden xl:inline-block">Add Post</span></li> */}
-                      
-                            <li className=" py-3 text-[20px] font-medium" onClick={() => { navigate("/profile")}}><i className="  text-[25px] mr-2 fa-regular fa-circle-user"></i> <span className=" hidden xl:inline-block">Profile</span></li>
-                    
+
+                        <li className=" py-3 text-[20px] font-medium" onClick={() => { navigate("/profile") }}><i className="  text-[25px] mr-2 fa-regular fa-circle-user"></i> <span className=" hidden xl:inline-block">Profile</span></li>
+
                     </ul>
 
                     <Button onClick={() => {

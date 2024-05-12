@@ -44,7 +44,7 @@ function ProfilePage({ user }) {
     };
 
     const uploadImg = async () => {
-        if (!file) return;
+        if (!file.photoFile) return;
 
         try {
             const storageRef = ref(storage, currentUserForProtectedRoutes.uid);
