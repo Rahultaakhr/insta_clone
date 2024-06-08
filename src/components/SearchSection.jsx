@@ -19,32 +19,32 @@ function SearchSection() {
 
     const handleOpen = () => setOpen(!open);
 
-    const handleFollow = async (user) => {
-        dispatch(followUser(user));
+    // const handleFollow = async (user) => {
+    //     dispatch(followUser(user));
 
-        const userDocRef = doc(fireDB, 'users', currentUserForProtectedRoutes.uid);
-        await updateDoc(userDocRef, {
-            following: [...currentUsers.follows, user]
-        });
+    //     const userDocRef = doc(fireDB, 'users', currentUserForProtectedRoutes.uid);
+    //     await updateDoc(userDocRef, {
+    //         following: [...currentUsers.follows, user]
+    //     });
 
-        await updateDoc(doc(fireDB, "users", user.uId), {
-            followers: arrayUnion(currentUser)
-        })
-    };
+    //     await updateDoc(doc(fireDB, "users", user.uId), {
+    //         followers: arrayUnion(currentUser)
+    //     })
+    // };
 
-    const handleUnfollow = async (user) => {
-        dispatch(unfollowUser(user));
+    // const handleUnfollow = async (user) => {
+    //     dispatch(unfollowUser(user));
 
-        const userDocRef = doc(fireDB, 'users', currentUserForProtectedRoutes.uid);
-        const updatedFollowing = currentUsers.follows.filter((u) => u.uId !== user.uId);
-        await updateDoc(userDocRef, {
-            following: updatedFollowing
-        });
+    //     const userDocRef = doc(fireDB, 'users', currentUserForProtectedRoutes.uid);
+    //     const updatedFollowing = currentUsers.follows.filter((u) => u.uId !== user.uId);
+    //     await updateDoc(userDocRef, {
+    //         following: updatedFollowing
+    //     });
 
-        await updateDoc(doc(fireDB, "users", user.uId), {
-            followers: arrayRemove(currentUser)
-        })
-    };
+    //     await updateDoc(doc(fireDB, "users", user.uId), {
+    //         followers: arrayRemove(currentUser)
+    //     })
+    // };
 
     const handleSearch = async () => {
         try {
@@ -128,8 +128,8 @@ function SearchSection() {
                             }}>
                                 <img src={user.profilePicUrl} className="border border-black w-[50px] h-[50px] rounded-full" alt="" />
                                 <h1 className="font-bold">{user.name}</h1>
-                            </div>
-                            <div>
+                            </div> 
+                            {/* <div>
                                 {currentUsers.follows.some((u) => u.uId === user.uId) ? (
                                     <button className="text-black font-bold" onClick={() => handleUnfollow(user)}>
                                         Unfollow
@@ -139,7 +139,7 @@ function SearchSection() {
                                         Follow
                                     </button>
                                 )}
-                            </div>
+                            </div> */}
                         </div>
                     ))}
                 </DialogBody>

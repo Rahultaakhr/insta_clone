@@ -93,7 +93,7 @@ const PostEditor = () => {
                                 <div className="count ml-auto text-gray-400 text-xs font-semibold">0/300</div>
                             </div>
                             <div className="max-w-[300px] max-h-[300px] p-4">
-                                {imageUrl && <img src={imageUrl} alt="" />}
+                                {imageUrl && <img src={imageUrl} className=" max-w-[300px] max-h-[300px] " alt="" />}
                             </div>
 
                             <div className="buttons flex justify-end">
